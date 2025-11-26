@@ -6,6 +6,7 @@ This project uses a RaspberryPi 5 and a RaspberryPi Camera to identify each numb
 - opencv
 - rich
 - picamera2
+- libcamera-dev
 
 ## Setup
 ```bash
