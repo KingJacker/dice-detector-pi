@@ -4,15 +4,16 @@ import os
 import numpy as np
 
 # --- CONFIGURATION ---
-IMAGE_PATH = "test-out/09_final_morph.jpg" 
-TEMPLATE_FOLDER = "templates/out/only_white"
+IMAGE_PATH = "input.jpg"
+# TEMPLATE_FOLDER = "templates/only_white"
+TEMPLATE_FOLDER = "templates/white_filled"
 DEBUG_FOLDER = "matcher-output/debug_maps"
 OUTPUT_PATH = "matcher-output/final_global_masked.jpg"
 
-RESIZE_FACTOR = 0.2  
+RESIZE_FACTOR = 0.2
 SCALES = np.linspace(0.8, 1.2, 5) 
-ROTATIONS = np.linspace(-45, 45, 10)
-SCORE_THRESHOLD = 0.65 
+ROTATIONS = np.linspace(-90, 90, 16)
+SCORE_THRESHOLD = 0.60
 OVERLAP_THRESHOLD = 0.2 
 MAX_DICE = 6 
 
@@ -225,10 +226,42 @@ def load_templates(template_folder):
 	templates = []
 	for file in files:
 		if file.lower().endswith(('.png', '.jpg', '.jpeg')):
-			print(f"Loaded: {file}")
+			# print(f"Loaded: {file}")
 			img = cv.imread(os.path.join(template_folder, file))
 			templates.append(img)
 	return templates
+
+
+# funciton to import
+def matcher(IMAGE_PATH):
+	img = cv.imread(IMAGE_PATH)
+
+	if img is None:
+		print(f"Error loading image: {IMAGE_PATH}")
+	else:
+		templates = load_templates(TEMPLATE_FOLDER)
+		if not templates:
+			return
+
+		# 1. Collect candidates + Save Heatmaps
+		candidates = collect_all_candidates(img, templates, SCALES, ROTATIONS, SCORE_THRESHOLD)
+
+		# 2. Visualize the "Cloud" of all detections
+		# draw_candidate_cloud(img, candidates)
+
+		# 3. Filter using Global Occupancy Mask + Save Step-by-Step
+		final_matches = apply_global_masking(candidates, img)
+
+		# 4. Draw Final Results
+		out_img, counts = draw_results(img, final_matches)
+
+		print("\nFinal Counts:")
+		for i in range(1, MAX_DICE+1):
+			print(f"{i} Eyes: {counts[i]}")
+
+		cv.imwrite(OUTPUT_PATH, out_img)
+		print(f"\nProcessing Complete.")
+
 
 # --- MAIN EXECUTION ---
 
