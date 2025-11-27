@@ -5,7 +5,6 @@ import numpy as np
 
 # --- CONFIGURATION ---
 IMAGE_PATH = "input.jpg"
-# TEMPLATE_FOLDER = "templates/only_white"
 TEMPLATE_FOLDER = "templates/white_filled"
 DEBUG_FOLDER = "matcher-output/debug_maps"
 OUTPUT_PATH = "matcher-output/final_global_masked.jpg"
