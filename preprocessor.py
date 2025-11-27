@@ -6,7 +6,7 @@ PROCESSED_PATH="templates/out"
 
 x_offset = 100
 y_offset = 200
-radius_scale = 0.55
+radius_scale = 0.5
 
 thresh_value = 200
 
