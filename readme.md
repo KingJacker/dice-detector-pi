@@ -8,7 +8,9 @@ This project uses a RaspberryPi 5 and a RaspberryPi Camera to identify each numb
 - picamera2
 - libcamera-dev
 
-## Setup
+## On RaspberryPi 5
+### Setup
+
 ```bash
 git clone https://github.com/KingJacker/dice-detector-pi.git
 cd dice-detector-pi
@@ -22,10 +24,30 @@ pip install -r requirements.txt
 pip install rpi-libcamera -Csetup-args="-Dversion=unknown"
 ```
 
-## Run
+### Run
 ```bash
 source venv/bin/activate.sh
 python3 main.py
+```
+
+## On PC
+### Setup
+```bash
+git clone https://github.com/KingJacker/dice-detector-pi.git
+cd dice-detector-pi
+
+python3 -m venv --system-site-packages venv
+source venv/bin/activate.sh
+
+python -m pip install opencv-python rich
+
+```
+
+### Run
+To run the matching script locally. This processes the images in `scripts/collected_images` and produces debug maps, processed and matched outputs.
+```bash
+cd scripts
+python process_and_match.py
 ```
 
 Find the resulting processed image in `matcher-output/final_global_masked.jpg`.
